@@ -1,21 +1,62 @@
 # MsgpaxHelper
 
-**TODO: Add description**
+This is a small, personal library that provides a thin but opionated around [Msgpax](https://github.com/lexmag/msgpax) that to conveniently encode and decode Elixir
+`Date` and `NaiveDateTime` values.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `msgpax_helper` to your list of dependencies in `mix.exs`:
+Until this library is published [in Hex](https://hex.pm/docs/publish), you can install it from Github by adding `msgpax_helper` to your list of dependencies in `mix.exs` as follows:
 
 ```elixir
 def deps do
   [
-    {:msgpax_helper, "~> 0.1.0"}
+    {:msgpax_helper, github: "aisrael/msgpax_helper"}
   ]
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/msgpax_helper](https://hexdocs.pm/msgpax_helper).
+## Usage
 
+To use this library, simply replace all calls to `Msgpax.pack`/`Msgpax.unpack` to `MessagePack.pack`/`MessagePack.unpack`:
+
+```
+iex> MessagePack.pack(~D[2008-08-16])
+{:ok, [214, 101 | <<7, 216, 8, 16>>]}
+
+iex> MessagePack.unpack([214, 101 | <<7, 216, 8, 16>>])
+{:ok, ~D[2008-08-16]}
+
+iex> MessagePack.pack!(~N[1879-03-14 11:30:00])
+[[199, 6], 102 | <<7, 87, 3, 14, 161, 184>>]
+
+iex> MessagePack.unpack!([[199, 6], 102 | <<7, 87, 3, 14, 161, 184>>])
+~N[1879-03-14 11:30:00]
+```
+
+## Encoding/Decoding Structs
+
+`Msgpax`, when combined with [maptu](https://github.com/lexhide/maptu), already provides a way to conveniently pack/unpack Elixir structs.
+
+First use `@derive [{Msgpax.Packer, include_struct_field: true}]` on your struct:
+
+```
+defmodule Foo do
+
+  @derive [{Msgpax.Packer, include_struct_field: true}]
+  defstruct foo: "bar"
+end
+```
+
+Packing the struct now encodes the `__struct__` field:
+
+```
+iex> MessagePack.pack!(%Foo{foo: "bar"})
+[130, [170 | "__struct__"], [170 | "Elixir.Foo"], [163 | "foo"], [163 | "bar"]]
+```
+
+When unpacking, just pipe the result to `Maptu.struct!`:
+
+```
+iex> [130, [170 | "__struct__"], [170 | "Elixir.Foo"], [163 | "foo"], [163 | "bar"]] |> Msgpax.unpack! |> Maptu.struct!
+%Foo{foo: "bar"}
+```
