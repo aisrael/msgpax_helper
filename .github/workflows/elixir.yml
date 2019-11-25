@@ -9,6 +9,11 @@ jobs:
       image: elixir:1.9.4-slim
     steps:
     - uses: actions/checkout@v1
+    - name: Cache Elixir deps
+      uses: actions/cache@v1
+      with:
+        path: deps
+        key: ${{ runner.OS }}-build-${{hashFiles('mix.lock') }}
     - name: Install Dependencies
       run: |
         mix local.rebar --force
