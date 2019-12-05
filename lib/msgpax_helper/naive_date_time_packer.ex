@@ -11,7 +11,7 @@ defimpl Msgpax.Packer, for: NaiveDateTime do
 
   ## Examples
 
-      iex> Msgpax.Packer.NaiveDateTime.pack(~N[2008-08-16 15:00:00])
+      iex> Msgpax.Packer.NaiveDateTime.pack(~N[2008-08-16 18:12:16])
       [[199, 6], 102 | <<7, 216, 8, 16, 210, 240>>]
 
       iex> Msgpax.Packer.NaiveDateTime.pack(~N[1879-03-14 11:30:00])
@@ -24,11 +24,9 @@ defimpl Msgpax.Packer, for: NaiveDateTime do
   def pack(ndt) do
     {{yyyy, mm, dd}, {h, m, s}} = ndt |> NaiveDateTime.to_erl()
 
-    seconds_from_midnight = h * 3600 + m * 60 + s
-
     @naive_date_time_ext_type
     |> Msgpax.Ext.new(
-      <<yyyy::integer-16, mm::integer-8, dd::integer-8, seconds_from_midnight::integer-16>>
+      <<yyyy::integer-16, mm::integer-8, dd::integer-8, h::integer-8, m::integer-8, s::integer-8>>
     )
     |> Msgpax.Packer.pack()
   end

@@ -26,11 +26,19 @@ defmodule MessagePackTest do
     end
 
     test "it can handle NaiveDateTime" do
-      assert {:ok, [[199, 6], 102 | <<7, 216, 8, 16, 210, 240>>]} ==
+      assert {:ok, [[199, 7], 102 | <<7, 216, 8, 16, 15, 0, 0>>]} ==
                MessagePack.pack(~N[2008-08-16 15:00:00])
 
       assert ~N[2008-08-16 15:00:00] ==
-               MessagePack.unpack!(<<199, 6, 102, 7, 216, 8, 16, 210, 240>>)
+               MessagePack.unpack!([[199, 7], 102 | <<7, 216, 8, 16, 15, 0, 0>>])
+    end
+
+    test "it can handle times past 18:12:15" do
+      assert ~N[2019-12-05 18:12:16] ==
+               MessagePack.unpack!(MessagePack.pack!(~N[2019-12-05 18:12:16]))
+
+      assert ~N[2019-12-05 23:59:59] ==
+               MessagePack.unpack!(MessagePack.pack!(~N[2019-12-05 23:59:59]))
     end
   end
 end

@@ -15,9 +15,9 @@ defmodule MessagePack do
       {:ok, ~D[2008-08-16]}
 
       iex> MessagePack.pack!(~N[1879-03-14 11:30:00])
-      [[199, 6], 102 | <<7, 87, 3, 14, 161, 184>>]
+      [[199, 7], 102 | <<7, 87, 3, 14, 11, 30, 0>>]
 
-      iex> MessagePack.unpack!([[199, 6], 102 | <<7, 87, 3, 14, 161, 184>>])
+      iex> MessagePack.unpack!([[199, 7], 102 | <<7, 87, 3, 14, 11, 30, 0>>])
       ~N[1879-03-14 11:30:00]
   """
 
@@ -35,7 +35,7 @@ defmodule MessagePack do
       iex> MessagePack.unpack(<<214, 101, 7, 216, 8, 16>>)
       {:ok, ~D[2008-08-16]}
 
-      iex> MessagePack.unpack(<<199, 6, 102, 7, 87, 3, 14, 161, 184>>)
+      iex> MessagePack.unpack([[199, 7], 102 | <<7, 87, 3, 14, 11, 30, 0>>])
       {:ok, ~N[1879-03-14 11:30:00]}
 
       iex> MessagePack.unpack(<<129>>)
@@ -61,7 +61,7 @@ defmodule MessagePack do
       iex> MessagePack.unpack!(<<214, 101, 7, 216, 8, 16>>)
       ~D[2008-08-16]
 
-      iex> MessagePack.unpack!(<<199, 6, 102, 7, 87, 3, 14, 161, 184>>)
+      iex> MessagePack.unpack!([[199, 7], 102 | <<7, 87, 3, 14, 11, 30, 0>>])
       ~N[1879-03-14 11:30:00]
   """
   @spec unpack!(iodata, Keyword.t()) :: any()

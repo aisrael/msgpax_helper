@@ -18,13 +18,9 @@ defmodule MsgpaxHelper.ElixirUnpacker do
   end
 
   def unpack(%Msgpax.Ext{type: @naive_date_time_ext_type, data: data}) do
-    with <<yyyy::integer-16, mm::integer-8, dd::integer-8, seconds_from_midnight::integer-16>> <-
+    with <<yyyy::integer-16, mm::integer-8, dd::integer-8, h::integer-8, m::integer-8,
+           s::integer-8>> <-
            data do
-      h = div(seconds_from_midnight, 3600)
-      r = rem(seconds_from_midnight, 3600)
-      m = div(r, 60)
-      s = rem(r, 60)
-
       NaiveDateTime.from_erl({{yyyy, mm, dd}, {h, m, s}})
     end
   end
