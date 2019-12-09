@@ -1,7 +1,7 @@
 defimpl Msgpax.Packer, for: Date do
   @moduledoc """
   Implementation of `Msgpax.Packer` for values of type `Date` that encodes to
-  a MessagePack Ext data type with marker value 101.
+  a MessagePack Ext data type with marker value `101`.
 
   It first uses `Date.to_erl/1` to extract the `yyyy`, `mm` and `dd` parts then
   simply stores the `yyyy` as a 16-bit integer and the others into individual bytes.

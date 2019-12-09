@@ -20,6 +20,14 @@ defmodule MessagePackTest do
       assert ~D[2008-08-16] = MessagePack.unpack!(<<214, 101, 7, 216, 8, 16>>)
     end
 
+    test "it can handle Decimal" do
+      assert {:ok, [[199, 11], 100 | <<1, 207, 0, 0, 0, 7, 80, 136, 255, 7, 246>>]} =
+               MessagePack.pack(Decimal.new(1, 31_415_926_535, -10))
+
+      assert Decimal.new(1, 31_415_926_535, -10) ==
+               MessagePack.unpack!([[199, 11], 100 | <<1, 207, 0, 0, 0, 7, 80, 136, 255, 7, 246>>])
+    end
+
     test "it can handle Date" do
       assert {:ok, [214, 101 | <<7, 216, 8, 16>>]} = MessagePack.pack(~D[2008-08-16])
       assert ~D[2008-08-16] == MessagePack.unpack!([214, 101 | <<7, 216, 8, 16>>])

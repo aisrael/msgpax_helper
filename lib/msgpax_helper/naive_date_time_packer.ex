@@ -1,7 +1,7 @@
 defimpl Msgpax.Packer, for: NaiveDateTime do
   @moduledoc """
   Implementation of `Msgpax.Packer` for values of type `NaiveDateTime` that encodes to
-  a MessagePack Ext data type with marker value 102.
+  a MessagePack Ext data type with marker value `102`.
 
   It first uses `Date.to_erl/1` to extract the `yyyy`, `mm`, `dd`, `h`, `m` and `s`
   parts then encodes the date as a 16-bit year (2 bytes) and 1-byte month and 1-byte day.

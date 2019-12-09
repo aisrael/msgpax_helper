@@ -4,7 +4,7 @@ defmodule MsgpaxHelper.MixProject do
   def project do
     [
       app: :msgpax_helper,
-      version: "0.2.0",
+      version: "0.2.1",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -22,6 +22,7 @@ defmodule MsgpaxHelper.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:decimal, "~> 1.0"},
       {:maptu, "~> 1.0"},
       {:msgpax, "~> 2.0"},
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
