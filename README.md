@@ -3,8 +3,7 @@
 [![Elixir CI](https://github.com/aisrael/msgpax_helper/workflows/Elixir%20CI/badge.svg)](https://github.com/aisrael/msgpax_helper/actions)
 [![Coverage Status](https://coveralls.io/repos/github/aisrael/msgpax_helper/badge.svg?branch=master)](https://coveralls.io/github/aisrael/msgpax_helper?branch=master)
 
-This is a small, personal library that provides a thin but opionated around [Msgpax](https://github.com/lexmag/msgpax) that can conveniently encode and decode Elixir
-`Date` and `NaiveDateTime` values.
+This is a small, personal library that provides a thin but opionated wrapper around [Msgpax](https://github.com/lexmag/msgpax) that can conveniently encode and decode Elixir `Date` and `NaiveDateTime` values.
 
 **IMPORTANT!**: Version 0.1 of this library had a critical flaw that it couldn't encode `NaiveDateTime`s where the time component was after `18:12:15` (this would overflow a 16-bit unsigned integer). Please upgrade to version 0.2 immediately (using `tag: "0.2"`, see below)!
 
